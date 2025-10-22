@@ -77,46 +77,51 @@
     </script>
     <style>
     body {
-        font-family: 'Inter', sans-serif;
-        background-color: #e5e7eb;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding-top: 20px;
-    }
+    font-family: 'Inter', sans-serif;
+    background-color: #e5e7eb;
+    min-height: 100vh;       /* ensures body covers at least full viewport */
+    margin: 0;               /* remove default body margin */
+    padding-top: 20px;       /* optional spacing at top */
+    overflow-x: hidden;      /* prevents horizontal scroll */
+}
 
-    /* Make the template container responsive */
-    #template-container {
-        width: 100%;
-        max-width: 1080px;   /* Desktop max width */
-        height: auto;        /* Let it expand naturally */
-        margin: 0 auto;
-        box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-        display: flex;
-        flex-direction: column;
-        border-radius: 12px;
-        overflow: hidden;
-    }
+/* Make the template container responsive and scrollable */
+#template-container {
+    width: 100%;
+    max-width: 1080px;       /* Desktop max width */
+    margin: 0 auto;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: visible;       /* let content flow naturally */
+}
 
-    /* Header, main, footer adapt to container width */
-    header, main, footer {
-        width: 100%;
-        box-sizing: border-box;
-    }
+/* Make header sticky */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 50;             /* above main content */
+}
 
-    /* Scrollbar styling */
-    main::-webkit-scrollbar {
-        width: 8px;
-    }
-    main::-webkit-scrollbar-track {
-        background: #e5e7eb;
-    }
-    main::-webkit-scrollbar-thumb {
-        background-color: #d1d5db;
-        border-radius: 20px;
-        border: 2px solid #e5e7eb;
-    }
+/* Header, main, footer adapt to container width */
+header, main, footer {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Optional: custom scrollbar for main */
+main::-webkit-scrollbar {
+    width: 8px;
+}
+main::-webkit-scrollbar-track {
+    background: #e5e7eb;
+}
+main::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 20px;
+    border: 2px solid #e5e7eb;
+}
 </style>
 </head>
 <body class="antialiased text-gray-800">
