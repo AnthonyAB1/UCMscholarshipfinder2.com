@@ -28,8 +28,10 @@
          * @param {string} viewId - The ID of the view to display ('view-home' or 'view-results').
          */
         function switchView(viewId) {
-            // Update view IDs from 'view-search' to 'view-home'
+            // Define all main views
             const views = ['view-home', 'view-results']; 
+            
+            // Hide all views
             views.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -37,6 +39,7 @@
                 }
             });
 
+            // Show the requested view
             const newView = document.getElementById(viewId);
             if (newView) {
                 newView.classList.remove('hidden');
@@ -44,14 +47,23 @@
                 newView.scrollTop = 0;
 
                 // Simple navigation button highlighting logic
-                document.getElementById('nav-home').classList.toggle('bg-ucm-gold', viewId === 'view-home');
-                document.getElementById('nav-home').classList.toggle('bg-white', viewId !== 'view-home');
-                document.getElementById('nav-results').classList.toggle('bg-white', viewId === 'view-home');
-                document.getElementById('nav-results').classList.toggle('bg-ucm-gold', viewId !== 'view-home');
+                const isHome = viewId === 'view-home';
 
-                // Swap text colors based on selected view
-                document.getElementById('nav-home').classList.toggle('text-ucm-red', viewId === 'view-home');
-                document.getElementById('nav-results').classList.toggle('text-ucm-red', viewId !== 'view-home');
+                document.getElementById('nav-home').classList.toggle('bg-ucm-gold', isHome);
+                document.getElementById('nav-home').classList.toggle('bg-white', !isHome);
+                document.getElementById('nav-home').classList.toggle('text-ucm-red', isHome);
+                document.getElementById('nav-home').classList.toggle('text-gray-700', !isHome);
+
+
+                document.getElementById('nav-results').classList.toggle('bg-white', isHome);
+                document.getElementById('nav-results').classList.toggle('bg-ucm-gold', !isHome);
+                document.getElementById('nav-results').classList.toggle('text-gray-700', isHome);
+                document.getElementById('nav-results').classList.toggle('text-ucm-red', !isHome);
+                
+                // Add border to unselected button for better contrast
+                document.getElementById('nav-home').classList.toggle('border-ucm-red', !isHome);
+                document.getElementById('nav-results').classList.toggle('border-ucm-red', isHome);
+
             }
         }
 
@@ -76,75 +88,56 @@
         });
     </script>
     <style>
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #e5e7eb;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px 0;  /* vertical spacing */
-    display: flex;
-    justify-content: center;
-    overflow-x: hidden; /* prevent horizontal scroll */
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb; /* Background for the surrounding viewport */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Start from the top */
+            padding-top: 20px;
+        }
 
-#template-container {
-    width: 95%;            /* shrink container on small screens */
-    max-width: 1080px;     /* desktop max width */
-    margin: 0 auto;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    overflow: visible;
-}
+        /* CRITICAL: Fixed dimensions for the 1080x1920 template */
+        #template-container {
+            width: 1080px;
+            height: 1920px;
+            /* Center the template and give it depth */
+            margin: 0 auto;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden; /* Ensures contents stay within the fixed frame */
+        }
 
-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-}
-
-header, main, footer {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Optional: make main scrollable if needed */
-main {
-    overflow-y: auto;
-    max-height: calc(100vh - 140px); /* keeps content within viewport on mobile */
-}
-
-/* Scrollbar styling */
-main::-webkit-scrollbar {
-    width: 6px;
-}
-main::-webkit-scrollbar-track {
-    background: #e5e7eb;
-}
-main::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 20px;
-    border: 2px solid #e5e7eb;
-}
-
-/* Optional: responsive adjustments */
-@media (max-width: 640px) {
-    #template-container {
-        width: 95%;          /* smaller width on phones */
-        padding: 0 10px;     /* some horizontal padding */
-    }
-    header h1 {
-        font-size: 2xl;      /* shrink heading */
-    }
-    button {
-        padding: 2px 6px;    /* smaller buttons */
-        font-size: 0.9rem;
-    }
-}
+        /* Custom scrollbar styling for the content areas */
+        main::-webkit-scrollbar {
+            width: 12px;
+        }
+        main::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        main::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 20px;
+            border: 3px solid #e5e7eb;
+        }
+        /* Custom select arrow styling */
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath fill='%23990000' d='M7 9l3 3 3-3'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5em;
+            padding-right: 3rem !important;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
 
     <div id="template-container" class="bg-ucm-surface">
 
+        <!-- Header/Navigation Bar -->
         <header class="bg-ucm-red shadow-lg flex-shrink-0 h-32 px-10 py-6">
             <div class="flex justify-between items-center h-full">
                 <div class="flex items-center space-x-5 cursor-pointer" onclick="switchView('view-home')">
@@ -157,37 +150,39 @@ main::-webkit-scrollbar-thumb {
                 </div>
 
                 <nav class="flex items-center space-x-6">
-                    <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:opacity-90 transition duration-300">
+                    <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:opacity-90 transition duration-300 border border-ucm-red">
                         Scholarship Search
                     </button>
-                    <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:bg-gray-100 transition duration-300 border border-ucm-red">
+                    <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-gray-700 font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:bg-gray-100 transition duration-300 border border-ucm-red">
                         My Decisions
                     </button>
                     <button class="p-3 text-white rounded-full hover:bg-white/20 transition-colors">
+                        <!-- Profile Icon -->
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </button>
                 </nav>
             </div>
         </header>
 
+        <!-- Home/Search View (Default View) -->
         <main id="view-home" class="flex-grow w-full p-10 overflow-y-auto">
             <div class="space-y-8">
 
+                <!-- New Welcome Section/Banner -->
                 <section class="bg-white p-10 rounded-2xl shadow-xl border-t-8 border-ucm-red flex-shrink-0">
                     <h2 class="text-4xl font-extrabold text-gray-900 mb-3 flex items-center">
                         <svg class="w-10 h-10 text-ucm-gold mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
                         Find Your Funding
                     </h2>
                     <p class="text-xl text-gray-600 mb-6">
-                        Welcome to the **UCM Scholarship Portal**! Use the tools below to explore all available scholarship opportunities, grants, and awards. Be sure to complete the **General Application** to be matched with dozens of awards automatically.
+                        Welcome to the UCM Scholarship Portal! Use the tools below to explore all available scholarship opportunities, grants, and awards. Be sure to complete the General Application to be matched with dozens of awards automatically.
                     </p>
-                    <a href="#" class="inline-block bg-ucm-gold text-ucm-red font-extrabold py-3 px-8 text-xl rounded-xl shadow-lg hover:bg-opacity-80 transition duration-300">
+                    <a href="#" onclick="event.preventDefault()" class="inline-block bg-ucm-gold text-ucm-red font-extrabold py-3 px-8 text-xl rounded-xl shadow-lg hover:bg-opacity-80 transition duration-300">
                         Complete General Application &rarr;
                     </a>
                 </section>
                 
-                ---
-
+                <!-- Search & Filter Controls -->
                 <aside class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-3">Filter Opportunities</h2>
                     
@@ -213,7 +208,7 @@ main::-webkit-scrollbar-thumb {
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="flex items-center text-base text-gray-600">
                                     <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red" checked>
-                                    <span class="ml-2">Scholarship (40)</span>
+                                    <span class="ml-2">Scholarship (3)</span>
                                 </label>
                                 <label class="flex items-center text-base text-gray-600">
                                     <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red">
@@ -236,14 +231,13 @@ main::-webkit-scrollbar-thumb {
                     </button>
                 </aside>
 
-                ---
-
+                <!-- Scholarship Results List -->
                 <section>
                     <div class="flex justify-between items-center mb-6 border-b pb-3">
                         <h2 class="text-3xl font-bold text-gray-900">Opportunities <span class="text-xl font-normal text-gray-500">(54 Total)</span></h2>
                         <div class="flex items-center space-x-3">
                             <label for="sort-by" class="text-lg text-gray-600 font-medium">Sort:</label>
-                            <select id="sort-by" class="p-2 text-lg border border-gray-300 rounded-xl">
+                            <select id="sort-by" class="p-2 text-lg border border-gray-300 rounded-xl appearance-none">
                                 <option>Deadline (Earliest)</option>
                                 <option>Award Amount (High to Low)</option>
                                 <option>Alphabetical (A-Z)</option>
@@ -252,12 +246,13 @@ main::-webkit-scrollbar-thumb {
                     </div>
 
                     <div class="space-y-6">
+                        <!-- Scholarship Card 1 (Clickable to open modal) -->
                         <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer" onclick="openModal()">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
                                     <a href="#" onclick="event.preventDefault();">A. Ralph Boxell Eagle Scout Scholarship</a>
                                 </h3>
-                                <button class="text-gray-400 hover:text-ucm-red transition-colors" title="Save Opportunity">
+                                <button class="text-gray-400 hover:text-ucm-red transition-colors p-1" title="Save Opportunity">
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                                 </button>
                             </div>
@@ -279,12 +274,13 @@ main::-webkit-scrollbar-thumb {
                             </div>
                         </div>
                         
+                        <!-- Scholarship Card 2 (Saved example) -->
                         <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
-                                    <a href="#">Harmon College Business Graduate Scholarship</a>
+                                    <a href="#" onclick="event.preventDefault();">Harmon College Business Graduate Scholarship</a>
                                 </h3>
-                                <button class="text-ucm-red transition-colors" title="Remove from Saved">
+                                <button class="text-ucm-red transition-colors p-1" title="Remove from Saved">
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                                 </button>
                             </div>
@@ -297,21 +293,22 @@ main::-webkit-scrollbar-thumb {
                                 <span class="bg-gray-100 text-gray-700 font-medium px-4 py-1.5 rounded-full mr-3 mb-2">
                                     Amount: Full Ride
                                 </span>
-                                <span class="bg-ucm-gold/20 text-ucm-red font-semibold px-4 py-1.5 rounded-full mr-3 mb-2">
-                                    Status: PENDING REVIEW
+                                <span class="bg-blue-100 text-blue-700 font-semibold px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Requires Essay
                                 </span>
-                                <span class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full mr-3 mb-2">
+                                <span class="bg-ucm-red/10 text-ucm-red px-4 py-1.5 rounded-full mr-3 mb-2">
                                     Harmon College Specific
                                 </span>
                             </div>
                         </div>
                         
+                        <!-- Scholarship Card 3 -->
                         <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer">
                             <div class="flex justify-between items-start">
                                 <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
-                                    <a href="#">Accountancy Scholarship Fund</a>
+                                    <a href="#" onclick="event.preventDefault();">Accountancy Scholarship Fund</a>
                                 </h3>
-                                <button class="text-gray-400 hover:text-ucm-red transition-colors" title="Save Opportunity">
+                                <button class="text-gray-400 hover:text-ucm-red transition-colors p-1" title="Save Opportunity">
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                                 </button>
                             </div>
@@ -333,6 +330,7 @@ main::-webkit-scrollbar-thumb {
                             </div>
                         </div>
                         
+                        <!-- Pagination -->
                         <div class="flex justify-center pt-8">
                             <nav class="flex space-x-4 text-xl">
                                 <button class="bg-white px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-500 hover:bg-gray-100 transition-colors">Previous</button>
@@ -348,6 +346,7 @@ main::-webkit-scrollbar-thumb {
             </div>
         </main>
 
+        <!-- Decisions/Results View (Hidden by Default) -->
         <main id="view-results" class="hidden flex-grow w-full p-10 overflow-y-auto">
             <div class="space-y-10">
                 
@@ -364,6 +363,7 @@ main::-webkit-scrollbar-thumb {
                 <section class="space-y-6">
                     <h3 class="text-3xl font-bold text-gray-900 border-b pb-3">Application Results</h3>
                     
+                    <!-- Awarded Scholarship Card -->
                     <div class="bg-white p-8 rounded-2xl shadow-2xl border-l-8 border-green-600">
                         <div class="flex justify-between items-start">
                             <h4 class="text-3xl font-bold text-green-700">
@@ -387,6 +387,7 @@ main::-webkit-scrollbar-thumb {
                         </div>
                     </div>
 
+                    <!-- Not Awarded Scholarship Card -->
                     <div class="bg-white p-8 rounded-2xl shadow-2xl border-l-8 border-gray-400">
                         <div class="flex justify-between items-start">
                             <h4 class="text-3xl font-bold text-gray-700">
@@ -413,10 +414,14 @@ main::-webkit-scrollbar-thumb {
                 
             </div>
         </main>
+        
+        <!-- Footer -->
         <footer class="bg-gray-800 text-white flex-shrink-0 py-4 px-10 text-center text-lg">
             <p class="text-gray-400">&copy; 2025 University of Central Missouri. Financial Aid & Scholarship Office.</p>
         </footer>
     </div>
+    
+    <!-- Scholarship Detail Modal -->
     <div id="detail-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex justify-center items-center p-4" onclick="closeModal()">
         
         <div class="bg-white w-full max-w-5xl max-h-[90vh] rounded-2xl shadow-2xl transform transition-all overflow-y-auto text-2xl" onclick="event.stopPropagation()">
@@ -472,6 +477,5 @@ main::-webkit-scrollbar-thumb {
             </div>
         </div>
     </div>
-
 </body>
 </html>
