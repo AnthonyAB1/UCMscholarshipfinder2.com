@@ -149,18 +149,26 @@
                     </h1>
                 </div>
 
-                <nav class="flex items-center space-x-6">
-                    <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:opacity-90 transition duration-300 border border-ucm-red">
-                        Scholarship Search
-                    </button>
-                    <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-gray-700 font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:bg-gray-100 transition duration-300 border border-ucm-red">
-                        My Decisions
-                    </button>
-                    <button class="p-3 text-white rounded-full hover:bg-white/20 transition-colors">
-                        <!-- Profile Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </button>
-                </nav>
+              <nav class="flex items-center space-x-4">
+    <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-3 px-6 text-xl rounded-lg shadow-md hover:opacity-90 transition duration-300 border border-ucm-red">
+        Scholarship Search
+    </button>
+    <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-gray-700 font-semibold py-3 px-6 text-xl rounded-lg shadow-md hover:bg-gray-100 transition duration-300 border border-ucm-red">
+        My Decisions
+    </button>
+    
+    <!-- Sign In Button -->
+    <button class="bg-ucm-gold text-ucm-red font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-opacity-90 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-ucm-gold focus:ring-offset-2 focus:ring-offset-ucm-red">
+        Sign In
+    </button>
+
+    <!-- Profile Icon -->
+    <button class="p-2 text-white rounded-full hover:bg-white/20 transition-colors" title="User Info">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+    </button>
+</nav>
             </div>
         </header>
 
