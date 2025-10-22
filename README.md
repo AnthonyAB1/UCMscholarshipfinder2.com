@@ -76,42 +76,48 @@
         });
     </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #e5e7eb; /* Background for the surrounding viewport */
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Start from the top */
-            padding-top: 20px;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #e5e7eb;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 20px;
+    }
 
-        /* CRITICAL: Fixed dimensions for the 1080x1920 template */
-        #template-container {
-            width: 1080px;
-            height: 1920px;
-            /* Center the template and give it depth */
-            margin: 0 auto;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            border-radius: 12px;
-            overflow: hidden; /* Ensures contents stay within the fixed frame */
-        }
+    /* Make the template container responsive */
+    #template-container {
+        width: 100%;
+        max-width: 1080px;   /* Desktop max width */
+        height: auto;        /* Let it expand naturally */
+        margin: 0 auto;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: hidden;
+    }
 
-        /* Custom scrollbar styling for the content areas */
-        main::-webkit-scrollbar {
-            width: 12px;
-        }
-        main::-webkit-scrollbar-track {
-            background: #e5e7eb;
-        }
-        main::-webkit-scrollbar-thumb {
-            background-color: #d1d5db;
-            border-radius: 20px;
-            border: 3px solid #e5e7eb;
-        }
-    </style>
+    /* Header, main, footer adapt to container width */
+    header, main, footer {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Scrollbar styling */
+    main::-webkit-scrollbar {
+        width: 8px;
+    }
+    main::-webkit-scrollbar-track {
+        background: #e5e7eb;
+    }
+    main::-webkit-scrollbar-thumb {
+        background-color: #d1d5db;
+        border-radius: 20px;
+        border: 2px solid #e5e7eb;
+    }
+</style>
 </head>
 <body class="antialiased text-gray-800">
 
