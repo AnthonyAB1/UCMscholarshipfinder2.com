@@ -76,43 +76,48 @@
         });
     </script>
     <style>
-    body {
+  body {
     font-family: 'Inter', sans-serif;
     background-color: #e5e7eb;
-    min-height: 100vh;       /* ensures body covers at least full viewport */
-    margin: 0;               /* remove default body margin */
-    padding-top: 20px;       /* optional spacing at top */
-    overflow-x: hidden;      /* prevents horizontal scroll */
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px 0;  /* vertical spacing */
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden; /* prevent horizontal scroll */
 }
 
-/* Make the template container responsive and scrollable */
 #template-container {
-    width: 100%;
-    max-width: 1080px;       /* Desktop max width */
+    width: 95%;            /* shrink container on small screens */
+    max-width: 1080px;     /* desktop max width */
     margin: 0 auto;
     box-shadow: 0 15px 50px rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
     border-radius: 12px;
-    overflow: visible;       /* let content flow naturally */
+    overflow: visible;
 }
 
-/* Make header sticky */
 header {
     position: sticky;
     top: 0;
-    z-index: 50;             /* above main content */
+    z-index: 50;
 }
 
-/* Header, main, footer adapt to container width */
 header, main, footer {
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Optional: custom scrollbar for main */
+/* Optional: make main scrollable if needed */
+main {
+    overflow-y: auto;
+    max-height: calc(100vh - 140px); /* keeps content within viewport on mobile */
+}
+
+/* Scrollbar styling */
 main::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 main::-webkit-scrollbar-track {
     background: #e5e7eb;
@@ -122,9 +127,21 @@ main::-webkit-scrollbar-thumb {
     border-radius: 20px;
     border: 2px solid #e5e7eb;
 }
-</style>
-</head>
-<body class="antialiased text-gray-800">
+
+/* Optional: responsive adjustments */
+@media (max-width: 640px) {
+    #template-container {
+        width: 95%;          /* smaller width on phones */
+        padding: 0 10px;     /* some horizontal padding */
+    }
+    header h1 {
+        font-size: 2xl;      /* shrink heading */
+    }
+    button {
+        padding: 2px 6px;    /* smaller buttons */
+        font-size: 0.9rem;
+    }
+}
 
     <div id="template-container" class="bg-ucm-surface">
 
