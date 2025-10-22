@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -191,7 +192,7 @@
                         Find Your Funding
                     </h2>
                     <p class="text-xl text-gray-600 mb-6">
-                        Welcome to the **UCM Scholarship Portal**! Use the tools below to explore all available scholarship opportunities, grants, and awards. Be sure to complete the **General Application** to be matched with dozens of awards automatically.
+                        Welcome to the UCM Scholarship Portal! Use the tools below to explore all available scholarship opportunities, grants, and awards. Be sure to complete the General Application to be matched with dozens of awards automatically.
                     </p>
                     <a id="cta-general-application" href="#" onclick="event.preventDefault()" class="inline-block bg-ucm-gold text-ucm-red font-extrabold py-3 px-8 text-xl rounded-xl shadow-lg hover:bg-opacity-80 transition duration-300">
                         Complete General Application &rarr;
