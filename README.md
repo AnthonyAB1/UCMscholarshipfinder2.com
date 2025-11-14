@@ -1,334 +1,450 @@
+# UCMscholarshipfinder2.com
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>UCM Scholarship Portal - Home/Search</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  // Tailwind custom config
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          'ucm-red': '#990000',
-          'ucm-gold': '#ffcc00',
-          'ucm-light': '#fefefe',
-          'ucm-surface': '#f9fafb'
-        },
-        fontFamily: {
-          sans: ['Inter','sans-serif']
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCM Scholarship Portal - Home/Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ucm-red': '#990000',
+                        'ucm-gold': '#ffcc00',
+                        'ucm-light': '#fefefe',
+                        'ucm-surface': '#f9fafb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
         }
-      }
-    }
-  };
 
-  // View switching
-  function switchView(viewId) {
-    const views = ['view-home','view-results'];
-    views.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    });
-    const newView = document.getElementById(viewId);
-    if (!newView) return;
-    newView.classList.remove('hidden');
-    newView.scrollTop = 0;
+        /**
+         * Function to switch between the main application views (Home/Search and Decisions).
+         * @param {string} viewId - The ID of the view to display ('view-home' or 'view-results').
+         */
+        function switchView(viewId) {
+            // Update view IDs from 'view-search' to 'view-home'
+            const views = ['view-home', 'view-results']; 
+            views.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
 
-    // nav highlight
-    const isHome = viewId === 'view-home';
-    const navHome = document.getElementById('nav-home');
-    const navResults = document.getElementById('nav-results');
-    if(navHome && navResults) {
-      navHome.classList.toggle('bg-ucm-gold', isHome);
-      navHome.classList.toggle('bg-white', !isHome);
-      navHome.classList.toggle('text-ucm-red', isHome);
-      navHome.classList.toggle('text-gray-700', !isHome);
-      navResults.classList.toggle('bg-ucm-gold', !isHome);
-      navResults.classList.toggle('bg-white', isHome);
-      navResults.classList.toggle('text-ucm-red', !isHome);
-      navResults.classList.toggle('text-gray-700', isHome);
-    }
-  }
+            const newView = document.getElementById(viewId);
+            if (newView) {
+                newView.classList.remove('hidden');
+                // Ensure the view scrolls to the top when switched
+                newView.scrollTop = 0;
 
-  // Modal
-  function openModal() {
-    document.getElementById('detail-modal')?.classList.remove('hidden');
-  }
-  function closeModal() {
-    document.getElementById('detail-modal')?.classList.add('hidden');
-  }
+                // Simple navigation button highlighting logic
+                document.getElementById('nav-home').classList.toggle('bg-ucm-gold', viewId === 'view-home');
+                document.getElementById('nav-home').classList.toggle('bg-white', viewId !== 'view-home');
+                document.getElementById('nav-results').classList.toggle('bg-white', viewId === 'view-home');
+                document.getElementById('nav-results').classList.toggle('bg-ucm-gold', viewId !== 'view-home');
 
-  document.addEventListener('DOMContentLoaded', () => {
-    switchView('view-home');
-  });
-</script>
+                // Swap text colors based on selected view
+                document.getElementById('nav-home').classList.toggle('text-ucm-red', viewId === 'view-home');
+                document.getElementById('nav-results').classList.toggle('text-ucm-red', viewId !== 'view-home');
+            }
+        }
 
-<style>
-  /* Page-level layout: center the app card and allow body scroll */
-  body{
-    font-family: 'Inter', sans-serif;
-    background: #e5e7eb;
-    margin: 0;
-    padding: 20px 0;            /* vertical breathing room */
-    display: flex;
-    justify-content: center;   /* center the app */
-    overflow-x: hidden;        /* avoid horizontal scroll */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+        // JavaScript for Modal Functionality
+        function openModal() {
+            const modal = document.getElementById('detail-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
 
-  /* App container: responsive and centered */
-  #template-container{
-    width: 95%;                /* roomy but shrinks on phones */
-    max-width: 900px;         /* smaller max to appear compact */
-    margin: 0 auto;
-    background: #f9fafb;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    display: flex;
-    flex-direction: column;
-    overflow: visible;        /* let content grow and body scroll */
-  }
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+        
+        // Initial view load function (set the home view as default on load)
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('view-home');
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb; /* Background for the surrounding viewport */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Start from the top */
+            padding-top: 20px;
+        }
 
-  /* sticky header behavior */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-  }
+        /* CRITICAL: Fixed dimensions for the 1080x1920 template */
+        #template-container {
+            width: 1080px;
+            height: 1920px;
+            /* Center the template and give it depth */
+            margin: 0 auto;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden; /* Ensures contents stay within the fixed frame */
+        }
 
-  /* keep inner elements full-width and box-sizing stable */
-  header, main, footer {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* make the main area scrollable if the content is tall, but prefer body scroll */
-  main {
-    /* do not set fixed height here — let body control scrolling */
-  }
-
-  /* scrollbar (optional) */
-  main::-webkit-scrollbar { width: 8px; }
-  main::-webkit-scrollbar-track { background: #e5e7eb; }
-  main::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 20px; border: 2px solid #e5e7eb; }
-
-  /* small utility: reduce large spacing on phones */
-  @media (max-width:640px){
-    #template-container { width: 95%; }
-    header { padding: 12px 16px; }
-    main { padding: 12px; }
-    footer { padding: 12px; }
-  }
-</style>
+        /* Custom scrollbar styling for the content areas */
+        main::-webkit-scrollbar {
+            width: 12px;
+        }
+        main::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        main::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+            border-radius: 20px;
+            border: 3px solid #e5e7eb;
+        }
+    </style>
 </head>
 <body class="antialiased text-gray-800">
 
-  <div id="template-container" class="bg-ucm-surface">
+    <div id="template-container" class="bg-ucm-surface">
 
-    <!-- HEADER -->
-    <header class="bg-ucm-red text-white shadow px-6 py-4 sm:px-8 sm:py-6">
-      <div class="flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="switchView('view-home')">
-          <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-full flex items-center justify-center text-ucm-red font-extrabold text-lg sm:text-2xl">UCM</div>
-          <div>
-            <h1 class="text-lg sm:text-2xl font-bold">Scholarship Portal</h1>
-          </div>
-        </div>
-
-        <nav class="flex items-center gap-2 sm:gap-4">
-          <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-2 px-3 sm:py-2 sm:px-5 rounded-lg shadow border border-ucm-red text-sm sm:text-base">Scholarship Search</button>
-          <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-gray-700 font-semibold py-2 px-3 sm:py-2 sm:px-5 rounded-lg shadow border border-ucm-red text-sm sm:text-base">My Decisions</button>
-          <button class="bg-ucm-gold text-ucm-red font-semibold py-2 px-3 rounded-lg hidden sm:inline-block">Sign In</button>
-          <button class="p-2 text-white rounded-full hover:bg-white/20" title="User Info">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </button>
-        </nav>
-      </div>
-    </header>
-
-    <!-- MAIN: Home view (default) -->
-    <main id="view-home" class="p-6 sm:p-8 md:p-10">
-      <div class="space-y-6 sm:space-y-8">
-
-        <!-- Hero -->
-        <section class="bg-white p-4 sm:p-6 rounded-xl shadow border-t-4 border-ucm-red">
-          <h2 class="text-lg sm:text-2xl font-extrabold flex items-center gap-3">
-            <svg class="w-6 h-6 text-ucm-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"/></svg>
-            Find Your Funding
-          </h2>
-          <p class="mt-2 text-sm sm:text-base text-gray-600">Welcome to the UCM Scholarship Portal! Use the tools below to explore scholarship opportunities, grants, and awards. Complete the General Application to be matched with dozens of awards automatically.</p>
-          <a href="#" onclick="event.preventDefault()" class="inline-block mt-3 bg-ucm-gold text-ucm-red font-semibold py-2 px-4 rounded-lg text-sm sm:text-base shadow">Complete General Application →</a>
-        </section>
-
-        <!-- Filters -->
-        <aside class="bg-white p-4 sm:p-6 rounded-xl shadow border">
-          <h3 class="text-base sm:text-lg font-bold mb-3">Filter Opportunities</h3>
-          <div class="space-y-3">
-            <div>
-              <label class="block text-sm text-gray-700 mb-1">Search by Keyword</label>
-              <input id="keyword-search" type="text" placeholder="e.g., Biology" class="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base focus:ring-ucm-red focus:border-ucm-red" />
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-sm text-gray-700 mb-1">Department Scope</label>
-                <select id="department-filter" class="w-full p-2 sm:p-3 border rounded-lg text-sm sm:text-base">
-                  <option>All Departments (54)</option>
-                  <option>Harmon College of Business</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm text-gray-700 mb-1">Award Type</label>
-                <div class="grid grid-cols-2 gap-2">
-                  <label class="flex items-center text-sm"><input type="checkbox" class="mr-2">Scholarship</label>
-                  <label class="flex items-center text-sm"><input type="checkbox" class="mr-2">Grant</label>
-                  <label class="flex items-center text-sm"><input type="checkbox" class="mr-2">Award</label>
-                  <label class="flex items-center text-sm"><input type="checkbox" class="mr-2">Pending</label>
+        <header class="bg-ucm-red shadow-lg flex-shrink-0 h-32 px-10 py-6">
+            <div class="flex justify-between items-center h-full">
+                <div class="flex items-center space-x-5 cursor-pointer" onclick="switchView('view-home')">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-ucm-red font-extrabold text-3xl">
+                        UCM
+                    </div>
+                    <h1 class="text-4xl font-bold text-white tracking-wide">
+                        Scholarship Portal
+                    </h1>
                 </div>
-              </div>
+
+                <nav class="flex items-center space-x-6">
+                    <button id="nav-home" onclick="switchView('view-home')" class="bg-ucm-gold text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:opacity-90 transition duration-300">
+                        Scholarship Search
+                    </button>
+                    <button id="nav-results" onclick="switchView('view-results')" class="bg-white text-ucm-red font-semibold py-3 px-8 text-xl rounded-xl shadow-md hover:bg-gray-100 transition duration-300 border border-ucm-red">
+                        My Decisions
+                    </button>
+                    <button class="p-3 text-white rounded-full hover:bg-white/20 transition-colors">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </nav>
             </div>
+        </header>
 
-            <button class="w-full bg-ucm-red text-white py-2 rounded-lg font-semibold mt-2">Apply Filters</button>
-          </div>
-        </aside>
+        <main id="view-home" class="flex-grow w-full p-10 overflow-y-auto">
+            <div class="space-y-8">
 
-        <!-- Opportunities list -->
-        <section>
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-            <h3 class="text-base sm:text-xl font-bold">Opportunities <span class="text-sm text-gray-500">(54)</span></h3>
-            <div class="flex items-center gap-2">
-              <label class="text-sm text-gray-600">Sort</label>
-              <select id="sort-by" class="p-1 sm:p-2 border rounded text-sm">
-                <option>Deadline (Earliest)</option>
-                <option>Award Amount (High to Low)</option>
-              </select>
+                <section class="bg-white p-10 rounded-2xl shadow-xl border-t-8 border-ucm-red flex-shrink-0">
+                    <h2 class="text-4xl font-extrabold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-10 h-10 text-ucm-gold mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+                        Find Your Funding
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-6">
+                        Welcome to the **UCM Scholarship Portal**! Use the tools below to explore all available scholarship opportunities, grants, and awards. Be sure to complete the **General Application** to be matched with dozens of awards automatically.
+                    </p>
+                    <a href="#" class="inline-block bg-ucm-gold text-ucm-red font-extrabold py-3 px-8 text-xl rounded-xl shadow-lg hover:bg-opacity-80 transition duration-300">
+                        Complete General Application &rarr;
+                    </a>
+                </section>
+                
+                ---
+
+                <aside class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 flex-shrink-0">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-3">Filter Opportunities</h2>
+                    
+                    <div class="mb-6">
+                        <label for="keyword-search" class="block text-lg font-medium text-gray-700 mb-2">Search by Keyword</label>
+                        <input type="text" id="keyword-search" placeholder="e.g., Biology, Leadership" class="w-full p-4 text-xl border-2 border-gray-300 rounded-xl focus:ring-ucm-red focus:border-ucm-red transition-shadow">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="department-filter" class="block text-lg font-medium text-gray-700 mb-2">Department Scope</label>
+                            <select id="department-filter" class="w-full p-4 text-xl border-2 border-gray-300 rounded-xl bg-white focus:ring-ucm-red focus:border-ucm-red transition-shadow appearance-none">
+                                <option>All Departments (54)</option>
+                                <option>College of Arts, Humanities...</option>
+                                <option>Harmon College of Business (12)</option>
+                                <option>Department of Agriculture (4)</option>
+                                <option>School of Nursing (8)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-700 mb-2">Award Type</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center text-base text-gray-600">
+                                    <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red" checked>
+                                    <span class="ml-2">Scholarship (40)</span>
+                                </label>
+                                <label class="flex items-center text-base text-gray-600">
+                                    <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red">
+                                    <span class="ml-2">Grant (8)</span>
+                                </label>
+                                <label class="flex items-center text-base text-gray-600">
+                                    <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red">
+                                    <span class="ml-2">Award/Prize (6)</span>
+                                </label>
+                                <label class="flex items-center text-base text-gray-600">
+                                    <input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red">
+                                    <span class="ml-2">Pending (2)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-ucm-red text-white font-extrabold text-xl py-3 rounded-xl shadow-lg hover:opacity-90 transition-opacity">
+                        Apply Filters
+                    </button>
+                </aside>
+
+                ---
+
+                <section>
+                    <div class="flex justify-between items-center mb-6 border-b pb-3">
+                        <h2 class="text-3xl font-bold text-gray-900">Opportunities <span class="text-xl font-normal text-gray-500">(54 Total)</span></h2>
+                        <div class="flex items-center space-x-3">
+                            <label for="sort-by" class="text-lg text-gray-600 font-medium">Sort:</label>
+                            <select id="sort-by" class="p-2 text-lg border border-gray-300 rounded-xl">
+                                <option>Deadline (Earliest)</option>
+                                <option>Award Amount (High to Low)</option>
+                                <option>Alphabetical (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer" onclick="openModal()">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
+                                    <a href="#" onclick="event.preventDefault();">A. Ralph Boxell Eagle Scout Scholarship</a>
+                                </h3>
+                                <button class="text-gray-400 hover:text-ucm-red transition-colors" title="Save Opportunity">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <p class="text-gray-600 mt-2 mb-4 text-lg">
+                                Available through the UCM Alumni Foundation for active Eagle Scouts enrolled at UCM.
+                            </p>
+                            
+                            <div class="flex flex-wrap items-center text-base">
+                                <span class="bg-gray-100 text-gray-700 font-medium px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Amount: Varies
+                                </span>
+                                <span class="bg-ucm-gold/20 text-ucm-red font-semibold px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Deadline: Mar 15, 2026
+                                </span>
+                                <span class="bg-ucm-red/10 text-ucm-red px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    General Application
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
+                                    <a href="#">Harmon College Business Graduate Scholarship</a>
+                                </h3>
+                                <button class="text-ucm-red transition-colors" title="Remove from Saved">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <p class="text-gray-600 mt-2 mb-4 text-lg">
+                                Established to support outstanding graduate students within the Harmon College of Business & Professional Studies.
+                            </p>
+                            
+                            <div class="flex flex-wrap items-center text-base">
+                                <span class="bg-gray-100 text-gray-700 font-medium px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Amount: Full Ride
+                                </span>
+                                <span class="bg-ucm-gold/20 text-ucm-red font-semibold px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Status: PENDING REVIEW
+                                </span>
+                                <span class="bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Harmon College Specific
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-2xl font-bold text-gray-900 hover:text-ucm-red transition-colors">
+                                    <a href="#">Accountancy Scholarship Fund</a>
+                                </h3>
+                                <button class="text-gray-400 hover:text-ucm-red transition-colors" title="Save Opportunity">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <p class="text-gray-600 mt-2 mb-4 text-lg">
+                                The Department of Accountancy Scholarship is available through the UCM Alumni Foundation.
+                            </p>
+                            
+                            <div class="flex flex-wrap items-center text-base">
+                                <span class="bg-gray-100 text-gray-700 font-medium px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Amount: $1,000
+                                </span>
+                                <span class="bg-ucm-gold/20 text-ucm-red font-semibold px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Deadline: Mar 15, 2026
+                                </span>
+                                <span class="bg-ucm-red/10 text-ucm-red px-4 py-1.5 rounded-full mr-3 mb-2">
+                                    Departmental
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center pt-8">
+                            <nav class="flex space-x-4 text-xl">
+                                <button class="bg-white px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-500 hover:bg-gray-100 transition-colors">Previous</button>
+                                <span class="bg-ucm-red text-white px-6 py-3 rounded-xl font-bold">1</span>
+                                <button class="bg-white px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">2</button>
+                                <button class="bg-white px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">3</button>
+                                <button class="bg-white px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-500 hover:bg-gray-100 transition-colors">Next</button>
+                            </nav>
+                        </div>
+
+                    </div>
+                </section>
             </div>
-          </div>
+        </main>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Card 1 -->
-            <article class="bg-white p-4 sm:p-5 rounded-xl shadow border cursor-pointer" onclick="openModal()">
-              <div class="flex justify-between items-start gap-3">
-                <h4 class="text-sm sm:text-lg font-bold hover:text-ucm-red">A. Ralph Boxell Eagle Scout Scholarship</h4>
-                <button class="p-1 text-gray-500" title="Save"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-width="1.5"/></svg></button>
-              </div>
-              <p class="text-xs sm:text-sm text-gray-600 mt-2">Available through the UCM Alumni Foundation for active Eagle Scouts enrolled at UCM.</p>
-              <div class="flex flex-wrap gap-2 mt-3 text-xs sm:text-sm">
-                <span class="bg-gray-100 px-2 py-1 rounded-full">Amount: Varies</span>
-                <span class="bg-ucm-gold/20 text-ucm-red px-2 py-1 rounded-full">Deadline: Mar 15, 2026</span>
-                <span class="bg-ucm-red/10 text-ucm-red px-2 py-1 rounded-full">General Application</span>
-              </div>
-            </article>
+        <main id="view-results" class="hidden flex-grow w-full p-10 overflow-y-auto">
+            <div class="space-y-10">
+                
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-t-8 border-ucm-gold">
+                    <h2 class="text-5xl font-extrabold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-12 h-12 text-ucm-red mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        Your Scholarships Are Ready!
+                    </h2>
+                    <p class="text-2xl text-gray-600 mt-4">
+                        Congratulations on completing the application process! Review the status of the specific scholarships you applied for below.
+                    </p>
+                </div>
 
-            <!-- Card 2 -->
-            <article class="bg-white p-4 sm:p-5 rounded-xl shadow border">
-              <div class="flex justify-between items-start gap-3">
-                <h4 class="text-sm sm:text-lg font-bold hover:text-ucm-red">Harmon College Business Graduate Scholarship</h4>
-                <button class="p-1 text-ucm-red" title="Saved"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-              <p class="text-xs sm:text-sm text-gray-600 mt-2">Established to support outstanding graduate students within the Harmon College.</p>
-              <div class="flex flex-wrap gap-2 mt-3 text-xs sm:text-sm">
-                <span class="bg-gray-100 px-2 py-1 rounded-full">Amount: Full Ride</span>
-                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Requires Essay</span>
-                <span class="bg-ucm-red/10 text-ucm-red px-2 py-1 rounded-full">Harmon Specific</span>
-              </div>
-            </article>
+                <section class="space-y-6">
+                    <h3 class="text-3xl font-bold text-gray-900 border-b pb-3">Application Results</h3>
+                    
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl border-l-8 border-green-600">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-3xl font-bold text-green-700">
+                                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full mr-4 text-xl font-extrabold">AWARDED</span>
+                                UCM Presidential Leadership Scholarship
+                            </h4>
+                            <span class="text-4xl font-extrabold text-green-600">$5,000</span>
+                        </div>
+                        
+                        <p class="text-gray-700 mt-4 mb-6 text-xl leading-relaxed">
+                            Congratulations! You have been selected to receive the Presidential Leadership Scholarship for the 2026-2027 academic year. Please check your official UCM email for the next steps and acceptance form required to claim these funds.
+                        </p>
+                        
+                        <div class="flex items-center space-x-4 pt-4 border-t border-green-100">
+                            <span class="text-lg font-medium text-gray-500">
+                                Status: Accepted on Oct 21, 2025
+                            </span>
+                            <button class="bg-green-600 text-white font-semibold py-2 px-6 rounded-xl text-xl hover:bg-green-700 transition duration-200">
+                                View Acceptance Form
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- Card 3 -->
-            <article class="bg-white p-4 sm:p-5 rounded-xl shadow border">
-              <div class="flex justify-between items-start gap-3">
-                <h4 class="text-sm sm:text-lg font-bold hover:text-ucm-red">Accountancy Scholarship Fund</h4>
-                <button class="p-1 text-gray-500" title="Save"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-width="1.5"/></svg></button>
-              </div>
-              <p class="text-xs sm:text-sm text-gray-600 mt-2">The Department of Accountancy Scholarship is available through the UCM Alumni Foundation.</p>
-              <div class="flex flex-wrap gap-2 mt-3 text-xs sm:text-sm">
-                <span class="bg-gray-100 px-2 py-1 rounded-full">Amount: $1,000</span>
-                <span class="bg-ucm-gold/20 text-ucm-red px-2 py-1 rounded-full">Deadline: Mar 15, 2026</span>
-                <span class="bg-ucm-red/10 text-ucm-red px-2 py-1 rounded-full">Departmental</span>
-              </div>
-            </article>
-          </div>
-
-          <!-- Pagination -->
-          <div class="mt-6 flex justify-center">
-            <nav class="flex gap-2">
-              <button class="px-3 py-2 rounded-lg border">Previous</button>
-              <button class="px-3 py-2 rounded-lg bg-ucm-red text-white">1</button>
-              <button class="px-3 py-2 rounded-lg border">2</button>
-              <button class="px-3 py-2 rounded-lg border">3</button>
-              <button class="px-3 py-2 rounded-lg border">Next</button>
-            </nav>
-          </div>
-        </section>
-
-      </div>
-    </main>
-
-    <!-- RESULTS view -->
-    <main id="view-results" class="hidden p-6 sm:p-8 md:p-10">
-      <div class="space-y-6">
-        <section class="bg-white p-4 sm:p-6 rounded-xl shadow border-t-4 border-ucm-gold">
-          <h2 class="text-lg sm:text-2xl font-extrabold">Your Decisions Are Ready!</h2>
-          <p class="text-sm sm:text-base text-gray-600 mt-2">Review the status of scholarships you applied for below.</p>
-        </section>
-
-        <section class="space-y-4">
-          <article class="bg-white p-4 sm:p-6 rounded-xl shadow border-l-4 border-green-600">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-green-700">UCM Presidential Leadership Scholarship</h3>
-              <span class="font-extrabold text-green-600">$5,000</span>
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl border-l-8 border-gray-400">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-3xl font-bold text-gray-700">
+                                <span class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full mr-4 text-xl font-extrabold">NOT AWARDED</span>
+                                Department of Computer Science Dean's Award
+                            </h4>
+                            <span class="text-4xl font-extrabold text-gray-500">30,000</span>
+                        </div>
+                        
+                        <p class="text-gray-700 mt-4 mb-6 text-xl leading-relaxed">
+                            Thank you for your application. Due to the highly competitive nature of this award and the limited funds available, we regret to inform you that you were not selected for the Computer Science Dean's Award this cycle. We encourage you to review other opportunities on the Search page.
+                        </p>
+                        
+                        <div class="flex items-center space-x-4 pt-4 border-t border-gray-200">
+                            <span class="text-lg font-medium text-gray-500">
+                                Status: Decision Finalized
+                            </span>
+                            <button class="bg-ucm-red text-white font-semibold py-2 px-6 rounded-xl text-xl opacity-50 cursor-not-allowed">
+                                View Details (Closed)
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
             </div>
-            <p class="text-sm sm:text-base text-gray-700 mt-2">Congratulations! You were selected — check your UCM email for next steps.</p>
-          </article>
-          <article class="bg-white p-4 sm:p-6 rounded-xl shadow border-l-4 border-gray-400">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-700">Department of Computer Science Dean's Award</h3>
-              <span class="font-extrabold text-gray-500">$30,000</span>
-            </div>
-            <p class="text-sm sm:text-base text-gray-700 mt-2">Decision finalized: not awarded.</p>
-          </article>
-        </section>
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center py-4 rounded-b-xl">
-      <p class="text-sm text-gray-400">&copy; 2025 University of Central Missouri. Financial Aid & Scholarship Office.</p>
-    </footer>
-
-  </div>
-
-  <!-- DETAILS MODAL -->
-  <div id="detail-modal" class="hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-60 flex items-center justify-center p-4" onclick="closeModal()">
-    <div class="bg-white w-full max-w-3xl rounded-xl shadow overflow-auto" onclick="event.stopPropagation()">
-      <div class="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
-        <h3 class="font-extrabold text-ucm-red">A. Ralph Boxell Eagle Scout Scholarship</h3>
-        <button class="p-2" onclick="closeModal()"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12" stroke-width="2"/></svg></button>
-      </div>
-      <div class="p-4 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div><span class="text-xs uppercase text-gray-500">Amount</span><div class="font-bold text-lg">Varies</div></div>
-          <div><span class="text-xs uppercase text-gray-500">Deadline</span><div class="font-bold text-lg text-ucm-red">Mar 15, 2026</div></div>
-          <div><span class="text-xs uppercase text-gray-500">Department</span><div class="font-bold text-lg">Alumni Foundation</div></div>
-        </div>
-        <div>
-          <h4 class="font-bold">Description</h4>
-          <p class="text-sm text-gray-700">This scholarship was established through ...</p>
-        </div>
-        <div>
-          <h4 class="font-bold">Eligibility</h4>
-          <ul class="list-disc ml-5 text-sm text-gray-700"><li>Active student</li><li>GPA 3.5+</li></ul>
-        </div>
-        <div>
-          <button class="w-full bg-ucm-red text-white py-2 rounded-lg font-semibold">Apply Now</button>
-        </div>
-      </div>
+        </main>
+        <footer class="bg-gray-800 text-white flex-shrink-0 py-4 px-10 text-center text-lg">
+            <p class="text-gray-400">&copy; 2025 University of Central Missouri. Financial Aid & Scholarship Office.</p>
+        </footer>
     </div>
-  </div>
+    <div id="detail-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex justify-center items-center p-4" onclick="closeModal()">
+        
+        <div class="bg-white w-full max-w-5xl max-h-[90vh] rounded-2xl shadow-2xl transform transition-all overflow-y-auto text-2xl" onclick="event.stopPropagation()">
+            
+            <div class="sticky top-0 bg-white p-8 border-b flex justify-between items-start z-10">
+                <h2 class="text-4xl font-extrabold text-ucm-red">A. Ralph Boxell Eagle Scout Scholarship</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-800 transition-colors p-2 rounded-full">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-8 space-y-8">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 border-b pb-6">
+                    <div class="flex flex-col">
+                        <span class="text-base font-semibold uppercase text-gray-500">Award Amount</span>
+                        <span class="text-3xl font-bold text-gray-800">Varies</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-base font-semibold uppercase text-gray-500">Deadline</span>
+                        <span class="text-3xl font-bold text-ucm-red">Mar 15, 2026</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-base font-semibold uppercase text-gray-500">Department</span>
+                        <span class="text-3xl font-bold text-gray-800">Alumni Foundation</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Description</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        This scholarship was established through the generous donation of the Boxell family to support students demonstrating exceptional dedication to leadership, service, and community involvement. Preference is given to active Eagle Scouts enrolled at the University of Central Missouri. All applicants must meet the general requirements for institutional aid, maintain a minimum 3.0 GPA, and be enrolled full-time (at least 12 credit hours). Funds are disbursed equally across the Fall and Spring semesters.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Eligibility Requirements</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 pl-4">
+                        <li>Must be an active, enrolled student at UCM.</li>
+                        <li>Must maintain a cumulative GPA of 3.5 or higher.</li>
+                        <li>Must be enrolled in a minimum of 12 credit hours per semester.</li>
+                        <li>Must submit documentation verifying Eagle Scout status.</li>
+                        <li>Financial need may be considered but is not mandatory.</li>
+                    </ul>
+                </div>
+
+                <div class="pt-6 border-t">
+                    <button class="w-full bg-ucm-red text-white font-extrabold py-4 rounded-xl shadow-lg hover:bg-ucm-red/90 transition-opacity text-2xl focus:outline-none focus:ring-4 focus:ring-ucm-red/50">
+                        Apply Now
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
