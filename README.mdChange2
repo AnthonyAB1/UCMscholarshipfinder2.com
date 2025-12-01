@@ -1,129 +1,130 @@
+@@ -1,478 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UCM Scholarship Portal - Home/Search</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-   // Custom Tailwind Configuration
-   tailwind.config = {
-       theme: {
-           extend: {
-               colors: {
-                   'ucm-red': '#990000',
-                   'ucm-gold': '#ffcc00',
-                   'ucm-light': '#fefefe',
-                   'ucm-surface': '#f9fafb',
-               },
-               fontFamily: {
-                   sans: ['Inter', 'sans-serif'],
-               },
-           }
-       }
-   }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCM Scholarship Portal - Home/Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ucm-red': '#990000',
+                        'ucm-gold': '#ffcc00',
+                        'ucm-light': '#fefefe',
+                        'ucm-surface': '#f9fafb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
 
-   /**
+        /**
          * Function to switch between the main application views (Home/Search and Decisions).
          * @param {string} viewId - The ID of the view to display ('view-home' or 'view-results').
          * Switch between main application views (Home/Search and Decisions)
-    */
-   function switchView(viewId) {
-       const views = ['view-home', 'view-results']; 
-       const navElements = {
-           'view-home': document.getElementById('nav-home'),
-           'view-results': document.getElementById('nav-results')
-       };
+         */
+        function switchView(viewId) {
+            const views = ['view-home', 'view-results']; 
+            const navElements = {
+                'view-home': document.getElementById('nav-home'),
+                'view-results': document.getElementById('nav-results')
+            };
 
-       views.forEach(id => {
-           const element = document.getElementById(id);
+            views.forEach(id => {
+                const element = document.getElementById(id);
                 if (element) {
                     element.classList.add('hidden');
                 }
                 if (element) element.classList.add('hidden');
-       });
+            });
 
-       const newView = document.getElementById(viewId);
-       if (newView) {
-           newView.classList.remove('hidden');
+            const newView = document.getElementById(viewId);
+            if (newView) {
+                newView.classList.remove('hidden');
                 // Ensure the view scrolls to the top when switched
-           newView.scrollTop = 0;
+                newView.scrollTop = 0;
 
                 // Simple navigation button highlighting logic
-           Object.keys(navElements).forEach(id => {
-               const isSelected = id === viewId;
-               const navButton = navElements[id];
+                Object.keys(navElements).forEach(id => {
+                    const isSelected = id === viewId;
+                    const navButton = navElements[id];
                     
-               navButton.classList.toggle('bg-ucm-gold', isSelected);
-               navButton.classList.toggle('bg-white', !isSelected);
+                    navButton.classList.toggle('bg-ucm-gold', isSelected);
+                    navButton.classList.toggle('bg-white', !isSelected);
                     navButton.classList.toggle('text-ucm-red', isSelected);
                     navButton.classList.toggle('text-ucm-red', !isSelected); // Keep text red on both for clear contrast
                     navButton.classList.toggle('font-extrabold', isSelected); // Enhance selected button
                     navButton.classList.toggle('text-ucm-red', true); 
                     navButton.classList.toggle('font-extrabold', isSelected);
-               navButton.classList.toggle('font-semibold', !isSelected);
-               navButton.classList.toggle('border-ucm-red', !isSelected);
-               navButton.classList.toggle('border-transparent', isSelected);
-           });
-       }
-   }
+                    navButton.classList.toggle('font-semibold', !isSelected);
+                    navButton.classList.toggle('border-ucm-red', !isSelected);
+                    navButton.classList.toggle('border-transparent', isSelected);
+                });
+            }
+        }
 
         // JavaScript for Modal Functionality
         // Modal functionality
-   function openModal() {
+        function openModal() {
             const modal = document.getElementById('detail-modal');
             if (modal) {
                 modal.classList.remove('hidden');
             }
             document.getElementById('detail-modal')?.classList.remove('hidden');
-   }
+        }
 
-   function closeModal() {
+        function closeModal() {
             const modal = document.getElementById('detail-modal');
             if (modal) {
                 modal.classList.add('hidden');
             }
             document.getElementById('detail-modal')?.classList.add('hidden');
-   }
-   
+        }
+        
         // Initial view load function (set the home view as default on load)
         // Initialize default view
-   document.addEventListener('DOMContentLoaded', () => {
-       switchView('view-home');
-   });
-</script>
-<style>
-   body {
-       font-family: 'Inter', sans-serif;
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('view-home');
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
             background-color: #e5e7eb; /* Background for the surrounding viewport */
             background-color: #e5e7eb;
-       min-height: 100vh;
-       display: flex;
-       justify-content: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
             align-items: flex-start; /* Start from the top */
             align-items: flex-start;
-       padding-top: 20px;
-   }
+            padding-top: 20px;
+        }
 
         /* CRITICAL: Fixed dimensions for the 1080x1920 template */
         /* Fixed dimensions for 1080x1920 template */
-   #template-container {
+        #template-container {
             width: 1080px;
             height: 1920px;
             /* Center the template and give it depth */
             width: 100%;
             max-width: 1080px;
             min-height: 100vh;
-       margin: 0 auto;
-       box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-       display: flex;
-       flex-direction: column;
-       border-radius: 12px;
+            margin: 0 auto;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
             overflow: hidden; /* Ensures contents stay within the fixed frame */
             overflow: hidden;
             padding: 0 10px;
-   }
+        }
 
         /* Custom scrollbar styling for the content areas */
         main::-webkit-scrollbar {
@@ -143,8 +144,8 @@
             background-color: #d1d5db; 
             border-radius: 20px; 
             border: 3px solid #e5e7eb; 
-   }
-</style>
+        }
+    </style>
 </head>
 <body class="antialiased text-gray-800">
 
@@ -166,7 +167,7 @@
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.07V2.5A1.5 1.5 0 0113.5 1h-3A1.5 1.5 0 019 2.5v1.57A8 8 0 1012 20a8 8 0 000-15.93zM12 18a6 6 0 110-12 6 6 0 010 12z"></path></svg>
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 12h-2V6h-4V4h4V2h2v2h2v2h-2v6zM4 18h16v-2H4v2zm0-4h16v-2H4v2z"></path></svg>
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17 5v14c0 1.1-.9 2-2 2H9c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2zM9 5h6v14H9V5z"></path></svg>
-   </div>
+        </div>
         <header class="bg-ucm-red shadow-lg flex-shrink-0 h-32 px-10 py-6">
             <div class="flex justify-between items-center h-full">
                 <div class="flex items-center space-x-5 cursor-pointer" onclick="switchView('view-home')">
@@ -196,7 +197,7 @@
             <div class="flex items-center space-x-5 cursor-pointer" onclick="switchView('view-home')">
                 <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-ucm-red font-extrabold text-3xl">UCM</div>
                 <h1 class="text-4xl font-bold text-white tracking-wide">Scholarship Portal</h1>
-       </div>
+            </div>
         </header>
 
         <main id="view-home" class="flex-grow w-full p-10 overflow-y-auto">
@@ -306,9 +307,9 @@
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                       </div>
-                   </div>
-               </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     <button class="w-full bg-ucm-red text-white font-extrabold text-xl py-3 rounded-xl shadow-lg hover:opacity-90 transition-opacity">
                         Apply Filters
@@ -339,8 +340,8 @@
                             <label class="flex items-center text-base text-gray-600"><input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red"><span class="ml-2">Grant (8)</span></label>
                             <label class="flex items-center text-base text-gray-600"><input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red"><span class="ml-2">Award/Prize (6)</span></label>
                             <label class="flex items-center text-base text-gray-600"><input type="checkbox" class="h-6 w-6 text-ucm-red border-gray-300 rounded focus:ring-ucm-red"><span class="ml-2">Pending (2)</span></label>
-                   </div>
-               </div>
+                        </div>
+                    </div>
 
                     <div class="space-y-6">
                         <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition duration-200 cursor-pointer" onclick="openModal()">
@@ -450,7 +451,7 @@
                     <p class="text-2xl text-gray-600 mt-4">
                         Congratulations on completing the application process! Review the status of the specific scholarships you applied for below.
                     </p>
-           </div>
+                </div>
 
                 <section class="space-y-6">
                     <h3 class="text-3xl font-bold text-gray-900 border-b pb-3">Application Results</h3>
@@ -515,8 +516,8 @@
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
-                   </div>
-               </div>
+                        </div>
+                    </div>
                 </section>
                 
             </div>
@@ -577,7 +578,7 @@
                     <button class="w-full bg-ucm-red text-white font-extrabold py-4 rounded-xl shadow-lg hover:bg-ucm-red/90 transition-opacity text-2xl focus:outline-none focus:ring-4 focus:ring-ucm-red/50">
                         Apply Now
                     </button>
-           </div>
+                </div>
 
             </div>
                 <!-- Opportunities cards would go here (same as your original code) -->
@@ -606,8 +607,8 @@
         </div>
         <div class="p-8 space-y-8">
             <!-- Modal content details here -->
-   </div>
-</div>
+        </div>
+    </div>
 </div>
 
 </body>
